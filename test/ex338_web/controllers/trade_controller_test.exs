@@ -35,4 +35,36 @@ defmodule Ex338Web.TradeControllerTest do
       refute String.contains?(conn.resp_body, team_c.team_name)
     end
   end
+  describe "new/2" do
+    test "renders a form to submit a trade", %{conn: conn} do
+      league = insert(:fantasy_league)
+
+      team = insert(:fantasy_team, fantasy_league: league)
+      insert(:owner, fantasy_team: team, user: conn.assigns.current_user)
+      player_a = insert(:fantasy_player)
+      insert(:roster_position, fantasy_player: player_a, fantasy_team: team)
+
+      team_b = insert(:fantasy_team, fantasy_league: league)
+      player_b = insert(:fantasy_player)
+      insert(:roster_position, fantasy_player: player_b, fantasy_team: team_b)
+
+      conn = get conn, fantasy_team_trade_path(conn, :new, team.id)
+
+      assert html_response(conn, 200) =~ ~r/Submit New Trade/
+      assert String.contains?(conn.resp_body, team.team_name)
+    end
+
+    @tag :pending
+    test "redirects to root if user is not owner", %{conn: conn} do
+      league = insert(:fantasy_league)
+      team = insert(:fantasy_team, fantasy_league: league)
+      player_a = insert(:fantasy_player)
+      _player_b = insert(:fantasy_player)
+      insert(:roster_position, fantasy_player: player_a, fantasy_team: team)
+
+      conn = get conn, fantasy_team_trade_path(conn, :new, team.id)
+
+      assert html_response(conn, 302) =~ ~r/redirected/
+    end
+  end
 end
