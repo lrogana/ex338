@@ -5,9 +5,40 @@
     </div>
   <% end %>
 
+  <%= inputs_for f, :trade_line_items, fn l -> %>
+
+    <div class="form-group">
+      <%= label l, :losing_team_id, class: "control-label" %>
+      <%= select l, :losing_team_id, 
+      ["me", "you"], class: "form-control",
+      prompt: "Select the team losing the player " %>
+      <%= error_tag l, :losing_team_id %>
+    </div>
+
+    <div class="form-group">
+      <%= label l, :fantasy_player_id, class: "control-label" %>
+      <%= select l, :fantasy_player_id, 
+      ["me", "you"], class: "form-control",
+      prompt: "Select the player to trade" %>
+      <%= error_tag l, :fantasy_player_id %>
+    </div>
+
+    <div class="form-group">
+      <%= label l, :gaining_team_id, class: "control-label" %>
+      <%= select l, :gaining_team_id, 
+      ["me", "you"], class: "form-control",
+      prompt: "Select the team gaining the player " %>
+      <%= error_tag l, :gaining_team_id %>
+    </div>
+
+    </br>
+    </br>
+
+  <% end %>
+
   <div class="form-group">
     <%= label f, :additional_terms, class: "control-label" %>
-    <%= text_input f, :additional_terms, class: "form-control" %>
+    <%= textarea f, :additional_terms, class: "form-control" %>
     <%= error_tag f, :additional_terms %>
   </div>
 

@@ -1,7 +1,7 @@
 defmodule Ex338Web.TradeController do
   use Ex338Web, :controller
 
-  alias Ex338.{FantasyLeague, Trade, FantasyTeam}
+  alias Ex338.{FantasyLeague, Trade, TradeLineItem, FantasyTeam}
 
   def index(conn, %{"fantasy_league_id" => league_id}) do
     league = FantasyLeague.Store.get(league_id)
@@ -12,11 +12,25 @@ defmodule Ex338Web.TradeController do
     )
   end
   def new(conn, %{"fantasy_team_id" => id}) do
-    changeset = Trade.changeset(%Trade{})
-    team = FantasyTeam.Store.find(id)
+    trade =
+      %Trade{trade_line_items:
+       [
+         %TradeLineItem{},
+         %TradeLineItem{},
+         %TradeLineItem{},
+         %TradeLineItem{},
+       ]
+     }
+    changeset = Trade.new_changeset(trade)
+    team = %{fantasy_league_id: league_id} = FantasyTeam.Store.find(id)
+    league_teams = FantasyLeague.Store.teams(league_id)
+    league_players = FantasyPlayer.Store.players(league_id)
     render(conn, "new.html",
       changeset: changeset,
-      fantasy_team: team
+      fantasy_team: team,
+      league_teams: league_teams,
+      league_players: league_players,
+
     )
   end
 end

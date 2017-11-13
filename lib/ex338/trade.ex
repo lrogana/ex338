@@ -22,6 +22,14 @@ defmodule Ex338.Trade do
     |> validate_required([:status])
   end
 
+  def new_changeset(trade, params \\ %{}) do
+    trade
+    |> cast(params, [:status, :additional_terms])
+    |> validate_required([:status])
+    |> cast_assoc(:trade_line_items, required: true)
+  end
+
+
   def status_options, do: @status_options
 
   def by_league(query, league_id) do
