@@ -23,14 +23,14 @@ defmodule Ex338Web.TradeController do
      }
     changeset = Trade.new_changeset(trade)
     team = %{fantasy_league_id: league_id} = FantasyTeam.Store.find(id)
-    league_teams = FantasyLeague.Store.teams(league_id)
-    league_players = FantasyPlayer.Store.players(league_id)
+    league_teams = FantasyTeam.Store.list_teams_for_league(league_id)
+    league_players = FantasyTeam.Store.owned_players_for_league(league_id)
+
     render(conn, "new.html",
       changeset: changeset,
       fantasy_team: team,
       league_teams: league_teams,
       league_players: league_players,
-
     )
   end
 end
