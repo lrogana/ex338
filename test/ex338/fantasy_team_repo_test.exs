@@ -63,9 +63,8 @@ defmodule Ex338.FantasyTeamRepoTest do
       player_b = insert(:fantasy_player, sports_league: league)
       player_c = insert(:fantasy_player, sports_league: league)
       player_d = insert(:fantasy_player, sports_league: league)
-      player_e = insert(:fantasy_player, sports_league: league)
+      _player_e = insert(:fantasy_player, sports_league: league)
       f_league = insert(:fantasy_league)
-      f_league_b = insert(:fantasy_league)
       team = insert(:fantasy_team, fantasy_league: f_league)
       team_b = insert(:fantasy_team, fantasy_league: f_league)
       insert(:roster_position, fantasy_team: team, fantasy_player: player_a,
