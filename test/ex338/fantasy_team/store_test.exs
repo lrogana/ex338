@@ -135,6 +135,30 @@ defmodule Ex338.FantasyTeam.StoreTest do
     end
   end
 
+  describe "owned_players_for_league/1" do
+    test "returns all owned players for a league" do
+      player_a = insert(:fantasy_player)
+      player_b = insert(:fantasy_player)
+      player_c = insert(:fantasy_player)
+      _player_d = insert(:fantasy_player)
+      league = insert(:fantasy_league)
+      other_league = insert(:fantasy_league)
+      team = insert(:fantasy_team, fantasy_league: league)
+      team_b = insert(:fantasy_team, fantasy_league: league)
+      other_team = insert(:fantasy_team, fantasy_league: other_league)
+      insert(:roster_position, fantasy_team: team, fantasy_player: player_a,
+                               status: "active")
+      insert(:roster_position, fantasy_team: team_b, fantasy_player: player_b,
+                               status: "active")
+      insert(:roster_position, fantasy_team: other_team, fantasy_player: player_c,
+                               status: "active")
+
+      results = Store.owned_players_for_league(league.id)
+
+      assert Enum.map(results, &(&1.id)) == [player_a.id, player_b.id]
+    end
+  end
+
 
   describe "update_team/2" do
     test "updates a fantasy team and its roster positions" do

@@ -79,6 +79,13 @@ defmodule Ex338.FantasyTeam.Store do
     |> Repo.all
   end
 
+  def owned_players_for_league(league_id) do
+    FantasyTeam
+    |> FantasyTeam.by_league(league_id)
+    |> FantasyTeam.owned_players
+    |> Repo.all
+  end
+
   def update_team(fantasy_team, fantasy_team_params) do
     fantasy_team
     |> FantasyTeam.owner_changeset(fantasy_team_params)
