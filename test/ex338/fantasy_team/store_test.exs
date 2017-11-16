@@ -129,9 +129,9 @@ defmodule Ex338.FantasyTeam.StoreTest do
       insert(:roster_position, fantasy_team: team, fantasy_player: player_d,
                                status: "injured_reserve")
 
-      result = Store.find_owned_players(team.id)
+      [result] = Store.find_owned_players(team.id)
 
-      assert Enum.count(result) == 1
+      assert result.id == player_a.id
     end
   end
 
