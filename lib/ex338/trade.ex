@@ -29,7 +29,6 @@ defmodule Ex338.Trade do
     |> cast_assoc(:trade_line_items, required: true)
   end
 
-
   def status_options, do: @status_options
 
   def by_league(query, league_id) do
