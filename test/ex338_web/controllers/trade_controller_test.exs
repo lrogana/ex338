@@ -54,7 +54,6 @@ defmodule Ex338Web.TradeControllerTest do
       assert String.contains?(conn.resp_body, team.team_name)
     end
 
-    @tag :pending
     test "redirects to root if user is not owner", %{conn: conn} do
       league = insert(:fantasy_league)
       team = insert(:fantasy_team, fantasy_league: league)
