@@ -1,7 +1,7 @@
 defmodule Ex338.Trade.Store do
   @moduledoc false
 
-  alias Ex338.{Trade, Repo, Trade.Admin, RosterPosition}
+  alias Ex338.{Trade, TradeLineItem, Repo, Trade.Admin, RosterPosition}
 
   def all_for_league(league_id) do
     Trade
@@ -9,6 +9,16 @@ defmodule Ex338.Trade.Store do
     |> Trade.preload_assocs
     |> Trade.newest_first
     |> Repo.all
+  end
+
+  def create_trade(attrs) do
+    attrs = Map.merge(attrs, %{"status" => "pending"})
+
+    IO.inspect attrs
+
+    trade_with_line_items()
+    |> Trade.new_changeset(attrs)
+    |> Repo.insert
   end
 
   def find!(id) do
@@ -37,6 +47,17 @@ defmodule Ex338.Trade.Store do
       true -> :error
       false -> positions
     end
+  end
+
+  defp trade_with_line_items() do
+    %Trade{trade_line_items:
+     [
+       %TradeLineItem{},
+       %TradeLineItem{},
+       %TradeLineItem{},
+       %TradeLineItem{},
+     ]
+   }
   end
 
   defp query_pos_id(item) do

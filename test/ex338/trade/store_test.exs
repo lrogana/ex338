@@ -34,6 +34,50 @@ defmodule Ex338.Trade.StoreTest do
     end
   end
 
+  describe "create_trade/1" do
+    test "creates a trade with line items" do
+      league = insert(:fantasy_league)
+
+      team = insert(:fantasy_team, fantasy_league: league)
+      player_a = insert(:fantasy_player)
+      insert(:roster_position, fantasy_player: player_a, fantasy_team: team)
+
+      team_b = insert(:fantasy_team, fantasy_league: league)
+      player_b = insert(:fantasy_player)
+      insert(:roster_position, fantasy_player: player_b, fantasy_team: team_b)
+
+      attrs = %{
+        "additional_terms" => "more",
+        "trade_line_items" => %{
+          "0" => %{
+            "fantasy_player_id" => player_a.id,
+            "gaining_team_id" => team_b.id,
+            "losing_team_id" => team.id
+          },
+          "1" => %{
+            "fantasy_player_id" => player_b.id,
+            "gaining_team_id" => team.id,
+            "losing_team_id" => team_b.id
+          },
+          # "2" => %{
+          #   "fantasy_player_id" => "",
+          #   "gaining_team_id" => "",
+          #   "losing_team_id" => ""
+          # },
+          # "3" => %{
+          #   "fantasy_player_id" => "",
+          #   "gaining_team_id" => "",
+          #   "losing_team_id" => ""
+          # },
+        }
+      }
+
+      {:ok, result} = Store.create_trade(attrs)
+
+      assert result.additional_terms == "more"
+    end
+  end
+
   describe "process_trade/2" do
     test "updates repo with successful trade " do
       league = insert(:fantasy_league)

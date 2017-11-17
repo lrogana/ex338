@@ -26,7 +26,7 @@ defmodule Ex338.Trade do
     trade
     |> cast(params, [:status, :additional_terms])
     |> validate_required([:status])
-    |> cast_assoc(:trade_line_items, required: true)
+    |> cast_assoc(:trade_line_items)
   end
 
   def status_options, do: @status_options
