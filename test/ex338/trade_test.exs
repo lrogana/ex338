@@ -3,16 +3,11 @@ defmodule Ex338.TradeTest do
 
   alias Ex338.Trade
 
-  @valid_attrs %{status: "some content"}
-  @invalid_attrs %{}
+  @valid_attrs %{}
 
-  test "changeset with valid attributes" do
+  test "changeset requires no attributes and provides default status" do
     changeset = Trade.changeset(%Trade{}, @valid_attrs)
     assert changeset.valid?
-  end
-
-  test "changeset with invalid attributes" do
-    changeset = Trade.changeset(%Trade{}, @invalid_attrs)
-    refute changeset.valid?
+    assert changeset.data.status == "Pending"
   end
 end

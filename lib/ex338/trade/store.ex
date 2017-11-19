@@ -12,10 +12,7 @@ defmodule Ex338.Trade.Store do
   end
 
   def create_trade(attrs) do
-    attrs =
-      attrs
-      |> set_status
-      |> filter_trade
+    attrs = filter_trade(attrs)
 
     %Trade{}
     |> Trade.new_changeset(attrs)
@@ -46,10 +43,6 @@ defmodule Ex338.Trade.Store do
   ## Implementations
 
   # create_trade
-
-  defp set_status(attrs) do
-    Map.merge(attrs, %{"status" => "Pending"})
-  end
 
   defp filter_trade(trade) do
     {line_items, trade} = Map.pop(trade, "trade_line_items")

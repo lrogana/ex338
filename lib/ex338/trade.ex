@@ -6,8 +6,8 @@ defmodule Ex338.Trade do
   @status_options ~w(Pending Approved Disapproved)
 
   schema "trades" do
-    field :status, :string
-    field :additional_terms, :string
+    field :status, :string, default: "Pending"
+    field :additional_terms, :string, default: ""
     has_many :trade_line_items, Ex338.TradeLineItem
 
     timestamps()
