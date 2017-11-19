@@ -1,7 +1,7 @@
 defmodule Ex338.Trade.Store do
   @moduledoc false
 
-  alias Ex338.{Trade, TradeLineItem, Repo, Trade.Admin, RosterPosition}
+  alias Ex338.{Trade, Repo, Trade.Admin, RosterPosition}
 
   def all_for_league(league_id) do
     Trade
@@ -12,11 +12,12 @@ defmodule Ex338.Trade.Store do
   end
 
   def create_trade(attrs) do
-    attrs = Map.merge(attrs, %{"status" => "pending"})
+    attrs =
+      attrs
+      |> set_status
+      |> filter_trade
 
-    IO.inspect attrs
-
-    trade_with_line_items()
+    %Trade{}
     |> Trade.new_changeset(attrs)
     |> Repo.insert
   end
@@ -40,6 +41,41 @@ defmodule Ex338.Trade.Store do
     end
   end
 
+  ## Helpers
+
+  ## Implementations
+
+  # create_trade
+
+  defp set_status(attrs) do
+    Map.merge(attrs, %{"status" => "Pending"})
+  end
+
+  defp filter_trade(trade) do
+    {line_items, trade} = Map.pop(trade, "trade_line_items")
+
+    line_items =
+      line_items
+      |> Enum.filter(&filter_line_items/1)
+      |> Enum.into(%{})
+
+    Map.put(trade, "trade_line_items", line_items)
+  end
+
+  def filter_line_items(
+    {_, %{
+      "fantasy_player_id" => nil,
+      "gaining_team_id" => nil,
+      "losing_team_id" => nil
+    }}
+  ) do
+    false
+  end
+
+  def filter_line_items(_), do: true
+
+  # process_trade
+
   defp get_pos_from_trade(%{trade_line_items: line_items}) do
     positions = Enum.map(line_items, &query_pos_id/1)
 
@@ -47,17 +83,6 @@ defmodule Ex338.Trade.Store do
       true -> :error
       false -> positions
     end
-  end
-
-  defp trade_with_line_items() do
-    %Trade{trade_line_items:
-     [
-       %TradeLineItem{},
-       %TradeLineItem{},
-       %TradeLineItem{},
-       %TradeLineItem{},
-     ]
-   }
   end
 
   defp query_pos_id(item) do

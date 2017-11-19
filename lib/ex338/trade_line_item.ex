@@ -19,7 +19,7 @@ defmodule Ex338.TradeLineItem do
     line_item
     |> cast(params, [:trade_id, :fantasy_player_id, :losing_team_id,
                      :gaining_team_id])
-    |> validate_required([:trade_id, :fantasy_player_id,
+    |> validate_required([:fantasy_player_id,
                           :losing_team_id, :gaining_team_id])
   end
 end

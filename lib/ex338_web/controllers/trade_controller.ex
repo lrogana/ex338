@@ -11,6 +11,8 @@ defmodule Ex338Web.TradeController do
     id_name: "fantasy_team_id",
     unauthorized_handler: {Authorization, :handle_unauthorized}
 
+  plug :scrub_params, "trade" when action in [:create, :update]
+
   def index(conn, %{"fantasy_league_id" => league_id}) do
     league = FantasyLeague.Store.get(league_id)
 
